@@ -4,25 +4,17 @@
       "_id": 1,
       "title": "Javascript 공부",
       "content": "열심히 하자",
-      "done": true,
-      "createdAt": "2023.10.18 10:12:45",
-      "updatedAt": "2023.10.30 18:34:17"
-    },
-    {
-      "_id": 2,
-      "title": "Typescript 공부",
-      "content": "자바스크립트에 type만 추가했다던데? 따로 배워야 하나?",
       "done": false,
-      "createdAt": "2023.10.19 11:22:15",
-      "updatedAt": "2023.11.15 17:46:41"
+      "createdAt": "2023.10.18 10:12:45",
+      "updatedAt": "2023.11.16 16:44:13"
     },
     {
       "_id": 3,
       "title": "React 공부",
       "content": "이번에는 정말 제대로 배워보자.",
-      "done": false,
+      "done": true,
       "createdAt": "2023.10.25 10:12:45",
-      "updatedAt": "2023.10.25 18:34:17"
+      "updatedAt": "2023.11.16 15:20:24"
     },
     {
       "_id": 4,
@@ -30,12 +22,34 @@
       "content": "오프라인이라 기대가 큼",
       "done": false,
       "createdAt": "2023.10.27 10:13:34",
-      "updatedAt": "2023.10.27 10:13:34"
+      "updatedAt": "2023.11.16 16:44:11"
+    },
+    {
+      "_id": 5,
+      "title": "가나다라",
+      "content": "가나다라",
+      "createdAt": "2023.11.16 14:34:20",
+      "updatedAt": "2023.11.16 16:44:11",
+      "done": false
+    },
+    {
+      "_id": 6,
+      "title": "adfadfadf",
+      "content": "adfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadfadf",
+      "createdAt": "2023.11.16 14:41:20",
+      "updatedAt": "2023.11.16 16:14:47"
+    },
+    {
+      "_id": 7,
+      "title": "sdf",
+      "content": "sdf",
+      "createdAt": "2023.11.16 15:52:16",
+      "updatedAt": "2023.11.16 15:52:16"
     }
   ],
   "users": [],
   "nextId": {
-    "items": 5,
+    "items": 8,
     "users": 1
   }
 }
