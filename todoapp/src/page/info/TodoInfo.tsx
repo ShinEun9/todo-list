@@ -7,19 +7,13 @@ import { deleteTodoAPI, getTodoAPI } from "api/apiUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-interface ContentKey {
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const substituteKeyName: ContentKey = {
+const listKeyName = {
   title: "제목",
   content: "내용",
   createdAt: "생성일",
   updatedAt: "수정일",
 };
+type Key = keyof typeof listKeyName;
 
 const TodoInfo = () => {
   const { id } = useParams();
@@ -58,14 +52,14 @@ const TodoInfo = () => {
   }, []);
 
   return (
-    <BasicLayout headerTitle="TodoList 상세페이지">
+    <BasicLayout headerTitle="TodoList 상세 페이지">
       <dl className={styles["detail-area"]}>
         {todoInfo &&
-          Object.keys(substituteKeyName).map((key: string) => {
+          Object.keys(listKeyName).map((key: string) => {
             return (
               <div key={key} className={styles["detail-row"]}>
                 <dt className={styles["row-title"]}>
-                  {substituteKeyName[key as keyof ContentKey]}
+                  {listKeyName[key as Key]}
                 </dt>
 
                 <dd className={styles["row-content"]}>
@@ -79,13 +73,6 @@ const TodoInfo = () => {
       <div className={buttonStyles["btn-group"]}>
         <button
           className={buttonStyles["btn-white"]}
-          onClick={() => navigate("/")}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
-
-        <button
-          className={buttonStyles["btn-pink"]}
           onClick={() => navigate(`/detail/update/${id}`)}
         >
           수정

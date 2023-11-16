@@ -4,11 +4,10 @@
   align-items: center;
 }
 
-button {
+.btn-group button {
   flex: 1;
-  font-size: 20px;
-  padding: 10px 0px;
-  cursor: pointer;
+  font-size: 18px;
+  min-height: 50px;
   box-shadow: 0px 5px 10px rgba(180, 174, 174, 0.688);
 }
 
@@ -25,7 +24,6 @@ button {
 .btn-pink {
   background-color: #c081d9;
   color: white;
-  border: none;
 }
 
 .btn-pink:hover {

@@ -6,6 +6,7 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { deleteTodoAPI, getTodoListAPI } from "api/apiUtils";
 import styles from "./TodoList.module.css";
 import BasicLayout from "layout/basic/BasicLayout";
+import Filter from "components/filter/Filter";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
@@ -58,28 +59,33 @@ const TodoList = () => {
 
   return (
     <>
-      <BasicLayout headerTitle="Todo List">
-        <ul>
+      <BasicLayout headerTitle="TodoList">
+        <Filter />
+        <ul className={styles["todo-list"]}>
           {todoList.map((todo) => {
             return (
               <li key={todo._id} className={styles.link}>
                 <input
                   type="checkbox"
+                  id={String(todo._id)}
                   checked={todo.done}
                   className={styles.input}
                   onChange={handleChangeCheckBox(todo._id)}
                 />
+                <label htmlFor={String(todo._id)}></label>
                 <h3
                   className={styles.title}
                   onClick={() => navigate(`/detail/${todo._id}`)}
                 >
                   {todo.title}
                 </h3>
-                <FontAwesomeIcon
-                  icon={faTrashCan}
-                  className={styles.faTrashCan}
+                <button
+                  className={styles["btn-delete"]}
+                  type="button"
                   onClick={handleDeleteClick(todo._id)}
-                />
+                >
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </button>
               </li>
             );
           })}

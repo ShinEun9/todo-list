@@ -8,16 +8,17 @@ const TodoRegist = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (input: FormData) => {
-    try {
-      if (window.confirm("등록 하시겠습니까?")) {
-        const response = await axios.post<AxiosResponse>(
-          `${process.env.REACT_APP_BASE_URL}/todolist`,
-          input
-        );
+    const confirm = window.confirm("등록 하시겠습니까?");
+    if (!confirm) return;
 
-        if (response.status === 200) {
-          navigate("/");
-        }
+    try {
+      const response = await axios.post<AxiosResponse>(
+        `${process.env.REACT_APP_BASE_URL}/todolist`,
+        input
+      );
+
+      if (response.status === 200) {
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

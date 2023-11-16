@@ -10,7 +10,7 @@
 .main {
   height: calc(100% - 120px);
   padding: 20px 10px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .header {
@@ -27,4 +27,23 @@
   color: white;
   opacity: 0.6;
   background-color: #c081d9;
+}
+
+.btn-back {
+  color: white;
+  background-color: transparent;
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  border: 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.btn-back:hover {
+  background-color: rgba(243, 243, 243, 0.2);
+  transition: all 0.2s ease-in-out;
 }

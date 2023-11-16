@@ -6,25 +6,22 @@
 
 .regist-form input {
   background-color: #fff;
-  font-size: 20px;
+  font-size: 18px;
   padding: 15px 30px;
   border: none;
   border-bottom: 0.2px solid rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  outline: none;
+  margin-bottom: 4px;
 }
 
 textarea {
   background-color: #fff;
   height: 340px;
   margin-bottom: 20px;
-  font-size: 23px;
+  font-size: 18px;
   font-family: unset;
   font-weight: 500;
   padding: 30px 30px;
   border: none;
-  cursor: pointer;
-  outline: none;
   resize: none;
 }
 

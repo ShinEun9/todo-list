@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./Form.module.css";
-import buttonStyles from "../../styles/Button.module.css";
+import buttonStyles from "styles/Button.module.css";
 
 export type FormData = {
   title: string;
@@ -15,26 +15,15 @@ type Props = {
 
 const Form = ({ onSubmit: onParentSubmit }: Props) => {
   const { id } = useParams();
-
   const navigate = useNavigate();
-  const [input, setInput] = useState({ title: "", content: "" });
 
+  // input
+  const [input, setInput] = useState({ title: "", content: "" });
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleBackBtnClick = () => {
-    const confirm = window.confirm("취소 하시겠습니까?");
-    if (!confirm) return;
-
-    if (id) {
-      navigate(`/detail/${id}`);
-    } else {
-      navigate("/");
-    }
   };
 
   const handleFormSubmit = async (e: FormEvent) => {
@@ -47,6 +36,17 @@ const Form = ({ onSubmit: onParentSubmit }: Props) => {
     }
 
     onParentSubmit(input);
+  };
+
+  const handleBackBtnClick = () => {
+    const confirm = window.confirm("취소 하시겠습니까?");
+    if (!confirm) return;
+
+    if (id) {
+      navigate(`/detail/${id}`);
+    } else {
+      navigate("/");
+    }
   };
 
   const getTodoData = async () => {
@@ -88,7 +88,7 @@ const Form = ({ onSubmit: onParentSubmit }: Props) => {
       <div className={buttonStyles["btn-group"]}>
         <button
           type="button"
-          className={buttonStyles["btn-pink"]}
+          className={buttonStyles["btn-white"]}
           onClick={handleBackBtnClick}
         >
           취소
