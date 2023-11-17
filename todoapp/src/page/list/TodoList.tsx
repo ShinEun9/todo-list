@@ -1,4 +1,7 @@
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { filterState, timeState, inputState } from "atoms/FilterState";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +13,9 @@ import Filter from "components/filter/Filter";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const [filterSort, setFilterSort] = useRecoilState(filterState);
+  const [timeSort, setTimeSort] = useRecoilState(timeState);
+  const [inputSort, setInputSort] = useRecoilState(inputState);
   const navigate = useNavigate();
 
   const handleChangeCheckBox = (todoId: number) => async () => {
@@ -23,7 +29,8 @@ const TodoList = () => {
         }
       );
       if (response.status === 200) {
-        getTodo();
+        await getTodo();
+        sort();
       }
     } catch (error) {
       console.log(error);
@@ -37,11 +44,45 @@ const TodoList = () => {
     try {
       const response = await deleteTodoAPI(todoId);
       if (response?.status === 200) {
-        getTodo();
+        await getTodo();
+        sort();
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const sort = () => {
+    if (filterSort !== "All") {
+      setTodoList((prev) => {
+        let todo = prev.slice();
+        todo = todo.filter((item) =>
+          filterSort === "Done" ? item.done : !item.done
+        );
+        console.log(filterSort, todo);
+        return todo;
+      });
+    }
+
+    setTodoList((prev) => {
+      let todo = prev.slice();
+      todo.sort((a, b) => {
+        const aDate = new Date(a.createdAt).getTime();
+        const bDate = new Date(b.createdAt).getTime();
+        if (timeSort) {
+          return bDate - aDate;
+        } else {
+          return aDate - bDate;
+        }
+      });
+      return todo;
+    });
+
+    setTodoList((prev) => {
+      let todo = prev.slice();
+      todo = todo.filter((item) => item.title.includes(inputSort));
+      return todo;
+    });
   };
 
   const getTodo = async () => {
@@ -54,13 +95,16 @@ const TodoList = () => {
   };
 
   useEffect(() => {
-    getTodo();
-  }, []);
+    (async () => {
+      await getTodo();
+      sort();
+    })();
+  }, [filterSort, timeSort]);
 
   return (
     <>
       <BasicLayout headerTitle="TodoList">
-        <Filter />
+        <Filter sort={sort} getTodo={getTodo} />
         <ul className={styles["todo-list"]}>
           {todoList.map((todo) => {
             return (
