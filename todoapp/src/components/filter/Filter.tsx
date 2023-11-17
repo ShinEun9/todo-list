@@ -36,14 +36,15 @@ function useDebounce(value: string, delay = 500) {
 const Filter = ({ sort, getTodo }: Props) => {
   const [filterSort, setFilterSort] = useRecoilState(filterState);
   const [timeSort, setTimeSort] = useRecoilState(timeState);
-  const [searchInput, setSearchInput] = useRecoilState(inputState);
-  const debouncedValue = useDebounce(searchInput);
+  const [inputSort, setInputSort] = useRecoilState(inputState);
+  const debouncedValue = useDebounce(inputSort);
 
   useEffect(() => {
     (async () => {
-      if (!searchInput) {
+      if (!inputSort) {
         await getTodo();
       }
+      console.log("hi");
       sort();
     })();
   }, [debouncedValue]);
@@ -53,7 +54,7 @@ const Filter = ({ sort, getTodo }: Props) => {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setInputSort(e.target.value);
   };
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setFilterSort((e.target as HTMLButtonElement).value);
@@ -64,7 +65,7 @@ const Filter = ({ sort, getTodo }: Props) => {
       <input
         type="text"
         placeholder="검색"
-        value={searchInput}
+        value={inputSort}
         onChange={handleSearchChange}
         className={styles["search-input"]}
       />

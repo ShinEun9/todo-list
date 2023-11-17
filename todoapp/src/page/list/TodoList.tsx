@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { filterState, timeState, inputState } from "atoms/FilterState";
 
 import { useEffect, useState } from "react";
@@ -13,9 +13,9 @@ import Filter from "components/filter/Filter";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
-  const [filterSort, setFilterSort] = useRecoilState(filterState);
-  const [timeSort, setTimeSort] = useRecoilState(timeState);
-  const [inputSort, setInputSort] = useRecoilState(inputState);
+  const filterSort = useRecoilValue(filterState);
+  const timeSort = useRecoilValue(timeState);
+  const inputSort = useRecoilValue(inputState);
   const navigate = useNavigate();
 
   const handleChangeCheckBox = (todoId: number) => async () => {
