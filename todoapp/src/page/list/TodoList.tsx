@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { filterState, timeState, inputState } from "atoms/FilterState";
+import { doneState, timeState, inputState } from "atoms/FilterState";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
@@ -11,11 +11,32 @@ import styles from "./TodoList.module.css";
 import BasicLayout from "layout/basic/BasicLayout";
 import Filter from "components/filter/Filter";
 
+function useDebounce(value: string, delay = 500) {
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const timerRef = useRef<number | null>();
+
+  useEffect(() => {
+    timerRef.current = window.setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
-  const filterSort = useRecoilValue(filterState);
+  const doneSort = useRecoilValue(doneState);
   const timeSort = useRecoilValue(timeState);
   const inputSort = useRecoilValue(inputState);
+  const debouncedSearchValue = useDebounce(inputSort);
+
   const navigate = useNavigate();
 
   const handleChangeCheckBox = (todoId: number) => async () => {
@@ -29,8 +50,7 @@ const TodoList = () => {
         }
       );
       if (response.status === 200) {
-        await getTodo();
-        sort();
+        await getData();
       }
     } catch (error) {
       console.log(error);
@@ -44,51 +64,43 @@ const TodoList = () => {
     try {
       const response = await deleteTodoAPI(todoId);
       if (response?.status === 200) {
-        await getTodo();
-        sort();
+        await getData();
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const sort = () => {
-    if (filterSort !== "All") {
-      setTodoList((prev) => {
-        let todo = prev.slice();
-        todo = todo.filter((item) =>
-          filterSort === "Done" ? item.done : !item.done
+  const sort = (data: TodoItem[]) => {
+    let filteredData = data;
+    if (doneSort !== "All") {
+      filteredData = filteredData.filter((item) =>
+        doneSort === "Done" ? item.done : !item.done
+      );
+    }
+
+    if (timeSort) {
+      console.log(timeSort);
+      filteredData = filteredData.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-        console.log(filterSort, todo);
-        return todo;
       });
     }
 
-    setTodoList((prev) => {
-      let todo = prev.slice();
-      todo.sort((a, b) => {
-        const aDate = new Date(a.createdAt).getTime();
-        const bDate = new Date(b.createdAt).getTime();
-        if (timeSort) {
-          return bDate - aDate;
-        } else {
-          return aDate - bDate;
-        }
-      });
-      return todo;
-    });
+    if (inputSort) {
+      filteredData = filteredData.filter((item) =>
+        item.title.includes(inputSort)
+      );
+    }
 
-    setTodoList((prev) => {
-      let todo = prev.slice();
-      todo = todo.filter((item) => item.title.includes(inputSort));
-      return todo;
-    });
+    setTodoList(filteredData);
   };
 
-  const getTodo = async () => {
+  const getData = async () => {
     try {
       const data = await getTodoListAPI();
-      setTodoList(data);
+      sort(data);
     } catch (err) {
       console.log(err);
     }
@@ -96,15 +108,14 @@ const TodoList = () => {
 
   useEffect(() => {
     (async () => {
-      await getTodo();
-      sort();
+      await getData();
     })();
-  }, [filterSort, timeSort]);
+  }, [doneSort, timeSort, debouncedSearchValue]);
 
   return (
     <>
       <BasicLayout headerTitle="TodoList">
-        <Filter sort={sort} getTodo={getTodo} />
+        <Filter />
         <ul className={styles["todo-list"]}>
           {todoList.map((todo) => {
             return (

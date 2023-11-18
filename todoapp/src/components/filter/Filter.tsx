@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, MouseEvent, ChangeEvent } from "react";
+import { MouseEvent, ChangeEvent } from "react";
 import { useRecoilState } from "recoil";
-import { filterState, timeState, inputState } from "atoms/FilterState";
+import { doneState, timeState, inputState } from "atoms/FilterState";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
@@ -10,44 +10,10 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 const filterData = ["All", "Done", "Not Done"];
 
-type Props = {
-  sort: () => void;
-  getTodo: () => Promise<void>;
-};
-function useDebounce(value: string, delay = 500) {
-  const [debouncedValue, setDebouncedValue] = useState("");
-  const timerRef = useRef<number | null>();
-
-  useEffect(() => {
-    timerRef.current = window.setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-const Filter = ({ sort, getTodo }: Props) => {
-  const [filterSort, setFilterSort] = useRecoilState(filterState);
+const Filter = () => {
+  const [doneSort, setDoneSort] = useRecoilState(doneState);
   const [timeSort, setTimeSort] = useRecoilState(timeState);
   const [inputSort, setInputSort] = useRecoilState(inputState);
-  const debouncedValue = useDebounce(inputSort);
-
-  useEffect(() => {
-    (async () => {
-      if (!inputSort) {
-        await getTodo();
-      }
-      console.log("hi");
-      sort();
-    })();
-  }, [debouncedValue]);
 
   const handleSortBtnClick = () => {
     setTimeSort((prev) => !prev);
@@ -57,11 +23,11 @@ const Filter = ({ sort, getTodo }: Props) => {
     setInputSort(e.target.value);
   };
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setFilterSort((e.target as HTMLButtonElement).value);
+    setDoneSort((e.target as HTMLButtonElement).value);
   };
 
   return (
-    <div className={styles["search-wrapper"]}>
+    <div className={styles["filter-wrapper"]}>
       <input
         type="text"
         placeholder="검색"
@@ -73,7 +39,7 @@ const Filter = ({ sort, getTodo }: Props) => {
         {filterData.map((value) => (
           <button
             key={value}
-            className={cx("btn-white", filterSort === value && "checked")}
+            className={cx("btn-white", doneSort === value && "checked")}
             type="button"
             onClick={handleClick}
             value={value}
@@ -85,11 +51,7 @@ const Filter = ({ sort, getTodo }: Props) => {
 
       <button onClick={handleSortBtnClick} className={styles["btn-sort"]}>
         <span>시간순</span>
-        {timeSort ? (
-          <FontAwesomeIcon icon={faArrowUp} />
-        ) : (
-          <FontAwesomeIcon icon={faArrowDown} />
-        )}
+        <FontAwesomeIcon icon={timeSort ? faArrowDown : faArrowUp} />
       </button>
     </div>
   );
