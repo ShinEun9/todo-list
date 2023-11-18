@@ -1,13 +1,13 @@
 import { atom } from "recoil";
 
-const filterState = atom({
-  key: "filterState",
+const doneState = atom({
+  key: "doneState",
   default: "All",
 });
 
 const timeState = atom({
   key: "timeState",
-  default: true,
+  default: false,
 });
 
 const inputState = atom({
@@ -15,4 +15,4 @@ const inputState = atom({
   default: "",
 });
 
-export { filterState, timeState, inputState };
+export { doneState, timeState, inputState };
